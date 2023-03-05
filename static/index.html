@@ -1,0 +1,63 @@
+<html lang="en">
+    <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<style>
+			image {
+				max-width: 100%;
+				height: auto;
+			}
+		</style>
+
+		<script>
+			function generate_qrcode(){
+				var mobile_no = $('#mobile_no').val();
+				var merchant_name = $('#merchant_name').val();
+				if( !mobile_no ) {
+					alert("Mobile no is empty!!!");
+					return
+				}
+				if (!merchant_name) {
+					alert("Merchant name is empty!!!");
+					return
+				}
+
+				var credit_transfer = {
+					mobile_number: mobile_no,
+					transaction_amount: parseFloat($('#transaction_amount').val()),
+					merchant_name: merchant_name
+				}
+				$.ajax({
+					type: 'post',
+					url: '/promptpay/qrcode',
+					data: JSON.stringify(credit_transfer),
+					contentType: "application/json; charset=utf-8",
+					traditional: true,
+					success: function (data) {
+						$('#image').html('<img src="data:image/png;base64,' + data  + '" />');
+					}
+				});
+			}
+		</script>
+		<title>Demo generate QR Tag30</title>
+	</head>
+	<body>
+	<form>
+		<label for="mobile_no">To Mobile No. :</label><br>
+		<input type="text" id="mobile_no" name="mobile_no" value="" placeholder="0801231234"><br/><br/>
+
+		<label for="transaction_amount">Transaction Amount (Baht) :</label><br/>
+		<input type="text" id="transaction_amount" name="transaction_amount" value="50"><br/><br/>
+
+		<label for="merchant_name">To Merchant Name :</label><br/>
+		<input type="text" id="merchant_name" name="merchant_name" value="" placeholder="ABC Co.,Ltd.">
+		<br/>
+		<br/>
+		<br/>
+		<button onclick="generate_qrcode();" type="button">Generate QR Code</button>
+	</form>
+		<div id="image"></div>
+	</body>
+</html>
