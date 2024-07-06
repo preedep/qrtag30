@@ -6,6 +6,7 @@ use std::vec::Vec;
 
 use crc::{Algorithm, Crc};
 use log::info;
+
 use crate::emvo_types::*;
 
 pub const ID_PAYLOAD_FORMAT_INDICATOR: TagID = "00"; // (M) Payload Format Indicator

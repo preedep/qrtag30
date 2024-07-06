@@ -8,7 +8,7 @@ use actix_web::web::Json;
 use base64::{encode, Engine};
 use base64::engine::general_purpose;
 use derive_more::{Display, Error};
-use log::info;
+use log::{error, info};
 use qrcode_generator::QrCodeEcc;
 use serde::{Deserialize, Serialize};
 
@@ -109,6 +109,7 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
             //HttpResponse::BadRequest().finish()
+            error!("Bad request");
             Err(PromptPayServiceError::BadClientData)
         }
     } else {
