@@ -56,7 +56,6 @@ pub struct QRCodeResponse {
 }
 impl Responder for QRCodeResponse {
     type Body = BoxBody;
-
     fn respond_to(self, req: &HttpRequest) -> HttpResponse<Self::Body> {
         HttpResponse::Ok()
             .append_header(("Content-Transfer-Encoding", "base64"))
@@ -72,19 +71,17 @@ impl QRCodeResponse {
     }
 }
 
-
 #[post("/promptpay/qrcode")]
 pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse, PromptPayServiceError> {
     let mut emvo = EMVQR::default();
     let result = emvo.set_payload_format_indicator("02".to_string());
+
     return if result.is_ok() {
         emvo.set_point_types(STATIC_POINT)
             .expect("TODO: panic message");
 
         let mut merchant_prompt_pay = MerchantPromptPayCreditTransfer::default();
-
         //let mobile_number = req.mobile_number.as_ref().unwrap(); //String::from("0809729900");
-
         merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
         merchant_prompt_pay.set_mobile_number(&req.0.mobile_number);
 
@@ -102,9 +99,11 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
         let result = emvo.generate_pay_load();
         if let Ok(result) = result {
             let data = result;
+
             let result: Vec<u8> =
                 qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
             let str_b64 = general_purpose::STANDARD.encode(&result);
+            info!("QRCode: {}", str_b64);
 
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
