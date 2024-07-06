@@ -46,8 +46,8 @@ async fn main() -> std::io::Result<()> {
         .with_log_processor(BatchLogProcessor::builder(exporter, Tokio).build())
         .with_config(
             opentelemetry_sdk::logs::config().with_resource(Resource::new(vec![
-                KeyValue::new(semcov::resource::SERVICE_NAMESPACE, "blob_proxy_dev"),
-                KeyValue::new(semcov::resource::SERVICE_NAME, "blob_proxy"),
+                KeyValue::new(semcov::resource::SERVICE_NAMESPACE, "PromptPay"),
+                KeyValue::new(semcov::resource::SERVICE_NAME, "PromptPay-QR-TAG30-Service"),
             ])),
         )
         .build();
