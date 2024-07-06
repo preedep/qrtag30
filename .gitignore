@@ -13,3 +13,4 @@ Cargo.lock
 /.idea/modules.xml
 /.idea/qrtag30.iml
 /.idea/vcs.xml
+/run.sh
