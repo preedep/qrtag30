@@ -98,7 +98,6 @@ pub struct EMVQR {
     payload_format_indicator: Option<EMVQRFieldDataObject>,
     point_of_initiation_method: Option<EMVQRFieldDataObject>,
     merchant_account_information: Option<HashMap<TagID, Box<dyn EMVOData>>>,
-    //merchant_account_information_summary: Option<EMVQRFieldDataObject>,
     merchant_category_code: Option<EMVQRFieldDataObject>,
     transaction_currency: Option<EMVQRFieldDataObject>,
     transaction_amount: Option<EMVQRFieldDataObject>,
@@ -138,7 +137,7 @@ impl EMVQRFieldDataObject {
                 let data_type_name = self.data.type_name();
                 let result = match data_type_name {
                     TYPE_NAME_NUMERIC => {
-                        //numberic
+                        //numeric
                         format!(
                             "{}{:0>2}{}",
                             self.tag_id,

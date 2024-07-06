@@ -1,19 +1,19 @@
 #![allow(dead_code)]
 
-use actix_web::{error, HttpRequest, HttpResponse, post, Responder};
 use actix_web::body::BoxBody;
 use actix_web::http::header::ContentType;
 use actix_web::http::StatusCode;
 use actix_web::web::Json;
-use base64::{encode, Engine};
+use actix_web::{error, post, HttpRequest, HttpResponse, Responder};
 use base64::engine::general_purpose;
+use base64::{encode, Engine};
 use derive_more::{Display, Error};
 use log::{error, info};
 use qrcode_generator::QrCodeEcc;
 use serde::{Deserialize, Serialize};
 
 use crate::emvo_qrcode::*;
-use crate::prompt_pay::{BAHT, CUSTOMER_PRESENTED, MerchantPromptPayCreditTransfer, THAI};
+use crate::prompt_pay::{MerchantPromptPayCreditTransfer, BAHT, CUSTOMER_PRESENTED, THAI};
 
 //use qrcode::QrCode;
 //use image::{Luma, ImageBuffer};
@@ -56,7 +56,7 @@ pub struct QRCodeResponse {
 }
 impl Responder for QRCodeResponse {
     type Body = BoxBody;
-    fn respond_to(self, req: &HttpRequest) -> HttpResponse<Self::Body> {
+    fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
         HttpResponse::Ok()
             .append_header(("Content-Transfer-Encoding", "base64"))
             .content_type("image/jpg")
@@ -72,7 +72,9 @@ impl QRCodeResponse {
 }
 
 #[post("/promptpay/qrcode")]
-pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse, PromptPayServiceError> {
+pub async fn qr_code_tag30(
+    req: Json<GenerateQrCodeRq>,
+) -> Result<QRCodeResponse, PromptPayServiceError> {
     let mut emvo = EMVQR::default();
     let result = emvo.set_payload_format_indicator("02".to_string());
 
@@ -94,7 +96,7 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
         emvo.set_postal_code("10240".to_string());
         emvo.set_country_code(THAI);
 
-       // info!("Payload: {:?}", emvo.generate_pay_load());
+        // info!("Payload: {:?}", emvo.generate_pay_load());
 
         let result = emvo.generate_pay_load();
         if let Ok(result) = result {

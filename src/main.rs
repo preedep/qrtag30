@@ -1,15 +1,14 @@
 #![allow(dead_code)]
 
-
 use actix_files::NamedFile;
-use actix_web::{App, Error, HttpServer, web};
+use actix_web::{web, App, Error, HttpServer};
 use actix_web_opentelemetry::RequestTracing;
 use log::Level;
 use opentelemetry::{global, KeyValue};
 use opentelemetry_appender_log::OpenTelemetryLogBridge;
 use opentelemetry_sdk::logs::{BatchLogProcessor, LoggerProvider};
-use opentelemetry_sdk::Resource;
 use opentelemetry_sdk::runtime::Tokio;
+use opentelemetry_sdk::Resource;
 use opentelemetry_semantic_conventions as semcov;
 
 use crate::apis::*;
@@ -36,12 +35,12 @@ async fn main() -> std::io::Result<()> {
         .with_live_metrics(true)
         .install_batch(Tokio);
 
-
     let connection_string = std::env::var("APPLICATIONINSIGHTS_CONNECTION_STRING").unwrap();
     let exporter = opentelemetry_application_insights::Exporter::new_from_connection_string(
         connection_string,
         client,
-    ).expect("connection string is valid");
+    )
+    .expect("connection string is valid");
     let logger_provider = LoggerProvider::builder()
         .with_log_processor(BatchLogProcessor::builder(exporter, Tokio).build())
         .with_config(
@@ -52,11 +51,9 @@ async fn main() -> std::io::Result<()> {
         )
         .build();
 
-    let otel_log_appender =
-        OpenTelemetryLogBridge::new(&logger_provider);
+    let otel_log_appender = OpenTelemetryLogBridge::new(&logger_provider);
     log::set_boxed_logger(Box::new(otel_log_appender)).expect("Could not set logger");
     log::set_max_level(Level::Info.to_level_filter());
-
 
     HttpServer::new(move || {
         App::new()
@@ -66,14 +63,15 @@ async fn main() -> std::io::Result<()> {
             .service(qr_code_tag30)
             .route("/", web::get().to(index))
     })
-        .workers(10)
-        .bind("0.0.0.0:8080")?
-        .run()
-        .await?;
-
+    .workers(10)
+    .bind("0.0.0.0:8080")?
+    .run()
+    .await?;
 
     global::shutdown_tracer_provider();
-    logger_provider.shutdown().expect("Failed to shutdown logger provider");
+    logger_provider
+        .shutdown()
+        .expect("Failed to shutdown logger provider");
 
     Ok(())
 }
