@@ -5,8 +5,10 @@ use actix_web::body::BoxBody;
 use actix_web::http::header::ContentType;
 use actix_web::http::StatusCode;
 use actix_web::web::Json;
-use base64::encode;
+use base64::{encode, Engine};
+use base64::engine::general_purpose;
 use derive_more::{Display, Error};
+use log::info;
 use qrcode_generator::QrCodeEcc;
 use serde::{Deserialize, Serialize};
 
@@ -95,12 +97,15 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
         emvo.set_postal_code("10240".to_string());
         emvo.set_country_code(THAI);
 
+       // info!("Payload: {:?}", emvo.generate_pay_load());
+
         let result = emvo.generate_pay_load();
-        if result.is_ok() {
-            let data = result.unwrap();
+        if let Ok(result) = result {
+            let data = result;
             let result: Vec<u8> =
                 qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
-            let str_b64 = encode(result);
+            let str_b64 = general_purpose::STANDARD.encode(&result);
+
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
             //HttpResponse::BadRequest().finish()

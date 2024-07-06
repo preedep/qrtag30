@@ -5,7 +5,7 @@ use std::convert::*;
 use std::vec::Vec;
 
 use crc::{Algorithm, Crc};
-
+use log::info;
 use crate::emvo_types::*;
 
 pub const ID_PAYLOAD_FORMAT_INDICATOR: TagID = "00"; // (M) Payload Format Indicator
@@ -427,7 +427,8 @@ impl EMVQR {
         let mut digest = crc.digest();
         digest.update(crc_value.into_bytes().as_slice());
         let crc_value_string = format!("{:04x}", digest.finalize());
-        println!("crc value {}", crc_value_string);
+
+        info!("crc value {}", crc_value_string);
 
         self.crc = Some(EMVQRFieldDataObject::new(
             ID_CRC,
