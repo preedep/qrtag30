@@ -6,8 +6,8 @@ use std::fmt::Formatter;
 
 use regex::Regex;
 
-pub const TYPE_NAME_NUMBERIC: &'static str = "numeric";
-pub const TYPE_NAME_ALPHA_NUMBERIC: &'static str = "alpha_numeric";
+pub const TYPE_NAME_NUMERIC: &'static str = "numeric";
+pub const TYPE_NAME_ALPHA_NUMERIC: &'static str = "alpha_numeric";
 pub const TYPE_NAME_STR: &'static str = "str";
 
 pub type Data = String;
@@ -76,7 +76,7 @@ impl EMVOData for EMVNumeric {
     }
 
     fn type_name(&self) -> &str {
-        TYPE_NAME_NUMBERIC
+        TYPE_NAME_NUMERIC
     }
 }
 impl TryFrom<Data> for EMVNumeric {
@@ -105,7 +105,7 @@ impl EMVOData for EMVAlphanumbericSpecial {
         self.d.clone().unwrap()
     }
     fn type_name(&self) -> &str {
-        TYPE_NAME_ALPHA_NUMBERIC
+        TYPE_NAME_ALPHA_NUMERIC
     }
 }
 impl TryFrom<Data> for EMVAlphanumbericSpecial {

@@ -92,7 +92,7 @@ impl EMVOData for MerchantPromptPayCreditTransfer {
     }
 
     fn type_name(&self) -> &str {
-        TYPE_NAME_ALPHA_NUMBERIC
+        TYPE_NAME_ALPHA_NUMERIC
     }
 }
 
