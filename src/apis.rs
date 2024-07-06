@@ -6,7 +6,7 @@ use actix_web::http::StatusCode;
 use actix_web::web::Json;
 use actix_web::{error, post, HttpRequest, HttpResponse, Responder};
 use base64::engine::general_purpose;
-use base64::{encode, Engine};
+use base64::{Engine};
 use derive_more::{Display, Error};
 use log::{error, info};
 use qrcode_generator::QrCodeEcc;

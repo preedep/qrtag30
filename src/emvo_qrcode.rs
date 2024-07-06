@@ -1,7 +1,7 @@
 #![allow(dead_code)]
-use std::borrow::Borrow;
+
 use std::collections::HashMap;
-use std::convert::*;
+use std::convert::TryFrom;
 use std::vec::Vec;
 
 use crc::{Algorithm, Crc};

@@ -11,8 +11,6 @@ use opentelemetry_sdk::runtime::Tokio;
 use opentelemetry_sdk::Resource;
 use opentelemetry_semantic_conventions as semcov;
 
-use crate::apis::*;
-use crate::emvo_types::*;
 
 mod apis;
 mod emvo_qrcode;
@@ -60,7 +58,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(actix_web::middleware::Compress::default())
             .wrap(actix_web::middleware::Logger::default())
             .wrap(RequestTracing::new())
-            .service(qr_code_tag30)
+            .service(apis::qr_code_tag30)
             .route("/", web::get().to(index))
     })
     .workers(10)

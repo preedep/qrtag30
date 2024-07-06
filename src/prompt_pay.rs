@@ -104,7 +104,7 @@ impl MerchantPromptPayCreditTransfer {
         let data = &PROMPTPAY_PRESENTED_TYPE_ARRAY[prompt_pay_presented_type];
         self.aid = Some(EMVQRFieldDataObject::new(
             ID_PROMPT_PAY_CREDIT_TRANSFER_AID,
-            Box::new(EMVAlphanumbericSpecial::try_from(data.clone().to_string()).unwrap()),
+            Box::new(EMVAlphanumbericSpecial::try_from(data.to_string()).unwrap()),
             MAX_LENGTH_AID,
         ));
     }
