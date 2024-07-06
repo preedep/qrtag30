@@ -1,13 +1,13 @@
 #![allow(dead_code)]
-use regex::Regex;
 use std::convert::*;
 use std::error::Error;
 use std::fmt;
 use std::fmt::Formatter;
-use std::vec::Vec;
 
-pub const TYPE_NAME_NUMBERIC: &'static str = "numberic";
-pub const TYPE_NAME_ALPHA_NUMBERIC: &'static str = "alpha_numberic";
+use regex::Regex;
+
+pub const TYPE_NAME_NUMBERIC: &'static str = "numeric";
+pub const TYPE_NAME_ALPHA_NUMBERIC: &'static str = "alpha_numeric";
 pub const TYPE_NAME_STR: &'static str = "str";
 
 pub type Data = String;

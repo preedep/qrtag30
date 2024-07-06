@@ -1,14 +1,12 @@
 #![allow(dead_code)]
-use crate::emvo_types::*;
-use crc::{Algorithm, Crc};
-use regex::Regex;
 use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::convert::*;
-use std::error::Error;
-use std::fmt;
-use std::fmt::Formatter;
 use std::vec::Vec;
+
+use crc::{Algorithm, Crc};
+
+use crate::emvo_types::*;
 
 pub const ID_PAYLOAD_FORMAT_INDICATOR: TagID = "00"; // (M) Payload Format Indicator
 pub const ID_POINT_OF_INITIATION_METHOD: TagID = "01"; // (O) Point of Initiation Method
@@ -138,7 +136,7 @@ impl EMVQRFieldDataObject {
                 }
                 let data_type_name = self.data.type_name();
                 let result = match data_type_name {
-                    TYPE_NAME_NUMBERIC => {
+                    TYPE_NAME_NUMERIC => {
                         //numberic
                         format!(
                             "{}{:0>2}{}",
@@ -227,8 +225,8 @@ impl EMVQR {
             return Err(EMVOError::new("Data Invalid"));
         }
         let numeric = EMVNumeric::try_from(data).unwrap();
-        let box_numberic = Box::new(numeric);
-        let field = EMVQRFieldDataObject::new(ID_PAYLOAD_FORMAT_INDICATOR, box_numberic, 2);
+        let box_numeric = Box::new(numeric);
+        let field = EMVQRFieldDataObject::new(ID_PAYLOAD_FORMAT_INDICATOR, box_numeric, 2);
         //self.add_payload_format_indicator(field);
         self.payload_format_indicator = Some(field);
         Ok(())
@@ -415,6 +413,7 @@ impl EMVQR {
 
         // use custom algorithm
         const CUSTOM_ALG: Algorithm<u16> = Algorithm {
+            width: 16,
             poly: 0x1021,
             init: 0xffff,
             refin: false,

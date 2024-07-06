@@ -1,35 +1,26 @@
 #![allow(dead_code)]
 
-use actix_web::http::header::{ContentEncoding, ContentType};
-use serde::{Deserialize, Serialize};
-//use qrcode::QrCode;
-//use image::{Luma, ImageBuffer};
-
-use qrcode_generator::QrCodeEcc;
-
+use actix_web::{error, HttpRequest, HttpResponse, post, Responder};
+use actix_web::body::BoxBody;
+use actix_web::http::header::ContentType;
+use actix_web::http::StatusCode;
+use actix_web::web::Json;
 use base64::encode;
-use std::env;
-use std::fs;
-use std::fs::{remove_file, File};
-use std::io;
-use std::io::BufReader;
-use std::io::Read;
-use std::time::{SystemTime, UNIX_EPOCH};
+use derive_more::{Display, Error};
+use qrcode_generator::QrCodeEcc;
+use serde::{Deserialize, Serialize};
 
 use crate::emvo_qrcode::*;
-use crate::prompt_pay::{MerchantPromptPayCreditTransfer, BAHT, CUSTOMER_PRESENTED, THAI};
-use actix_web::web::Json;
-use actix_web::{post, HttpResponse, error, Responder, HttpRequest};
-use actix_web::body::BoxBody;
-use actix_web::http::StatusCode;
+use crate::prompt_pay::{BAHT, CUSTOMER_PRESENTED, MerchantPromptPayCreditTransfer, THAI};
 
-use derive_more::{Display, Error};
+//use qrcode::QrCode;
+//use image::{Luma, ImageBuffer};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct GenerateQrCodeRq {
     pub transaction_amount: f32,
     pub mobile_number: String,
-    pub merchant_name: String
+    pub merchant_name: String,
 }
 
 #[derive(Debug, Display, Error)]
@@ -59,7 +50,7 @@ impl error::ResponseError for PromptPayServiceError {
     }
 }
 pub struct QRCodeResponse {
-    pub qrcode_base64 : String
+    pub qrcode_base64: String,
 }
 impl Responder for QRCodeResponse {
     type Body = BoxBody;
@@ -72,16 +63,16 @@ impl Responder for QRCodeResponse {
     }
 }
 impl QRCodeResponse {
-    fn create_response(qrcode_generator : String) -> QRCodeResponse {
-        return QRCodeResponse{
+    fn create_response(qrcode_generator: String) -> QRCodeResponse {
+        return QRCodeResponse {
             qrcode_base64: qrcode_generator,
-        }
+        };
     }
 }
 
 
 #[post("/promptpay/qrcode")]
-pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse,PromptPayServiceError> {
+pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse, PromptPayServiceError> {
     let mut emvo = EMVQR::default();
     let result = emvo.set_payload_format_indicator("02".to_string());
     return if result.is_ok() {
