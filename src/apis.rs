@@ -24,6 +24,7 @@ use actix_web::body::BoxBody;
 use actix_web::http::StatusCode;
 
 use derive_more::{Display, Error};
+use log::info;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct GenerateQrCodeRq {
@@ -110,6 +111,9 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
             let result: Vec<u8> =
                 qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
             let str_b64 = encode(result);
+
+            info!("QRCode: {}", str_b64);
+
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
             //HttpResponse::BadRequest().finish()
