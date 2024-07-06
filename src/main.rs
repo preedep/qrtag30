@@ -11,7 +11,6 @@ use opentelemetry_sdk::runtime::Tokio;
 use opentelemetry_sdk::Resource;
 use opentelemetry_semantic_conventions as semcov;
 
-
 mod apis;
 mod emvo_qrcode;
 mod emvo_types;

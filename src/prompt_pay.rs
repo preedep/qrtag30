@@ -145,17 +145,19 @@ impl MerchantPromptPayCreditTransfer {
     }
 }
 mod test {
-    use base64::Engine;
     use base64::engine::general_purpose;
+    use base64::Engine;
     use qrcode_generator::QrCodeEcc;
+
     use super::*;
 
     #[test]
     fn test_merchant_prompt_pay_credit_transfer() {
         let mut emvo = EMVQR::default();
-        let result = emvo.set_payload_format_indicator("02".to_string()).expect("Error");
+        let result = emvo
+            .set_payload_format_indicator("02".to_string())
+            .expect("Error");
         let mut merchant_prompt_pay = MerchantPromptPayCreditTransfer::default();
-        //let mobile_number = req.mobile_number.as_ref().unwrap(); //String::from("0809729900");
         merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
         merchant_prompt_pay.set_mobile_number(&"0809729900".to_string());
 
