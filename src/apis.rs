@@ -108,11 +108,13 @@ pub async fn qr_code_tag30(req: Json<GenerateQrCodeRq>) -> Result<QRCodeResponse
         let result = emvo.generate_pay_load();
         if result.is_ok() {
             let data = result.unwrap();
+            info!("QRCode: {}", data);
+
             let result: Vec<u8> =
                 qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
             let str_b64 = encode(result);
 
-            info!("QRCode: {}", str_b64);
+            info!("QRCode base64: {}", str_b64);
 
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
