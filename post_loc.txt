@@ -1,0 +1,5 @@
+{
+  "mobile_number":"0809221234",
+  "transaction_amount":1200,
+  "merchant_name":"ABC Co.,Ltd."
+}

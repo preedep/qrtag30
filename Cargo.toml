@@ -1,0 +1,36 @@
+[package]
+name = "prompt_pay_service"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pretty_env_logger = "0.5"
+actix-web = "4"
+actix-files = "0.6"
+
+regex = "1.5"
+crc = "3.2"
+
+qrcode-generator = "4.1"
+base64 = "0.22"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+
+opentelemetry-application-insights = { version = "0.33",default-features = false , features = ["logs","metrics","live-metrics","reqwest-client-rustls"] }
+opentelemetry = { version = "0.23" ,default-features = false, features = [ "logs_level_enabled","metrics","trace","logs"] }
+opentelemetry_sdk = { version = "0.23", features = ["metrics", "logs","trace", "logs_level_enabled", "rt-tokio"] }
+opentelemetry-appender-log = { version = "0.4", features = ["logs_level_enabled","with-serde"] }
+opentelemetry-semantic-conventions = {version = "0.15" }
+opentelemetry-http = {version = "0.12", features = ["reqwest-rustls"]}
+
+actix-web-opentelemetry = {version = "0.18", features = ["metrics"]}
+
+reqwest = { version = "0.11" , default-features = false, features = ["rustls-tls","json"] }
+
+log = "0.4"
+derive_more = "0.99"
+rand = "0.8"
+
