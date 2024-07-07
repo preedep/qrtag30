@@ -15,8 +15,10 @@ use serde::{Deserialize, Serialize};
 use crate::emvo_qrcode::*;
 use crate::prompt_pay::{BAHT, CUSTOMER_PRESENTED, MerchantPromptPayCreditTransfer, THAI};
 
+
 //use qrcode::QrCode;
 //use image::{Luma, ImageBuffer};
+
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct GenerateQrCodeRq {
@@ -100,6 +102,7 @@ pub async fn qr_code_tag30(
         // info!("Payload: {:?}", emvo.generate_pay_load());
 
         let result = emvo.generate_pay_load();
+
         if let Ok(result) = result {
             let data = result;
 
@@ -107,6 +110,7 @@ pub async fn qr_code_tag30(
                 qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
             let str_b64 = general_purpose::STANDARD.encode(&result);
             info!("QRCode: {}", str_b64);
+
 
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
