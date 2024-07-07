@@ -152,6 +152,29 @@ mod test {
     use super::*;
 
     #[test]
+    fn test_merchant_prompt_pay_credit_transfer_pay_load() {
+        let mut emvo = EMVQR::default();
+        let result = emvo
+            .set_payload_format_indicator("02".to_string())
+            .expect("Error");
+        let mut merchant_prompt_pay = MerchantPromptPayCreditTransfer::default();
+        merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
+        merchant_prompt_pay.set_mobile_number(&"0809729900".to_string());
+
+        emvo.set_transaction_currency(BAHT);
+        emvo.set_transaction_amount("50".to_string());
+        emvo.set_merchant_name("test".to_string());
+        emvo.set_merchant_category_code("5311".to_string());
+        emvo.set_merchant_account_information("29", Box::new(merchant_prompt_pay));
+        emvo.set_merchant_city("Bangkok".to_string());
+        emvo.set_postal_code("10240".to_string());
+        emvo.set_country_code(THAI);
+
+        let result = emvo.generate_pay_load().expect("Error");
+        let expected_result = "00020201021129370016A000000677010114011300008097299005204531153037645402505802TH5904test6007Bangkok610510240630443DC";
+        assert_eq!(result, expected_result);
+    }
+    #[test]
     fn test_merchant_prompt_pay_credit_transfer() {
         let mut emvo = EMVQR::default();
         let result = emvo
@@ -177,4 +200,5 @@ mod test {
         let expected_qr_code = "iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAAAAADo+/p2AAAEA0lEQVR42u3WS3bbMBBFQe1/084458jQbZB2IKV6xg+AftUc8PGlLtUDAUCAAAEqgAABAlQAAQIEqAACfGPAx7Seb/vXs9VVX746fbznbWkBAgQIECBAgKcBfr2ue5DuYQkz7aqjNwECBAgQIECAhwKO44UkIXN/ZXd896QFCBAgQIAAAX4CYF8X/L9y7WQGCBAgQIAAAQL8vr8g14eyqsCyagkgQIAAAQIE+LGAqxofflE8jKEvv5gWIECAAAECBHguYK8V57tcjdMCBAgQIECAAA8EvFhPz7k13niX0OCVwAABAgQIECDAUwD7v9Bjs8J5PezunvdMAyBAgAABAgR4IGDoL9xc5erH7s5m3PVql++eAQQIECBAgABPAxxXOHW1bhVvtaDDj+fd3gQIECBAgAABng0YWEKuwNnDdqsVS58iQIAAAQIECPB4wNBfr9D7TtNxs1+ZBkCAAAECBAjwGMDe+0WP0PTFEa367OtePAMIECBAgAABHgPYkca5QqDV1W5nY+PRFwUQIECAAAECPBTwos7qqsfr1EHgHlWAAAECBAgQ4IGAK7LQyi5LOG+XepWvdwYQIECAAAECPB6wt/KPWMIJPUrv7LtnAAECBAgQIMB3Agw6Y6Tdm91xjNT2BAgQIECAAAEeAzjWCdR9NuPMu/Pu7b5qDiBAgAABAgR4GGC/Ch5j3F25Pu9wbOMECBAgQIAAAR4DGLrtEXrm8aQuDqzP9MUzgAABAgQIEOChgOMk47Dj6Pcs78YvTgcIECBAgAABHgN4j8fqzacnjHf5tQIIECBAgAABvidgVw2Hr7Ze/VT2eOMf1Yv5AAIECBAgQIAnAfaw4wirjn5iz90voy8HCBAgQIAAAR4IuJuk+/fedwV6E320AAECBAgQIMBzAcNeF9tc6fQIT5u4p2uAAAECBAgQ4HsCdoFVhG7VM68266rjKF/rAggQIECAAAEeAzhmGVOHm6GJ3T572rAcIECAAAECBPgugG3L+Owe6u4/HlGIAhAgQIAAAQI8FzDUY1EXhzJ+M1z1rgECBAgQIECAbw24Wj0+daUT4FdNhD1369X3AxAgQIAAAQI8BXC3VgI/yDLeM3wSo2cAAQIECBAgwGMAH5v/Sf3qIm5ot78Srl60BBAgQIAAAQI8DbD3Hp6tGgvndepws3fdHAECBAgQIECAhwKO/6F2c43D9nb7K+PRAgQIECBAgAA/D3B1eHhzl2VMvbscIECAAAECBPixgGPVVZthXV9+0REgQIAAAQIE+C6AvdtgvBvhnpthijvjAwgQIECAAAGeBtgrrNuNF4Y5biJsNloHECBAgAABAjwGUM0KIECAAAEqgAABAlQAAQIEqAACBPj/1B/AwBs9kdYQtQAAAABJRU5ErkJggg==";
         assert_eq!(str_b64, expected_qr_code);
     }
+
 }
