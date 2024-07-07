@@ -1,19 +1,19 @@
 #![allow(dead_code)]
 
+use actix_web::{error, HttpRequest, HttpResponse, post, Responder};
 use actix_web::body::BoxBody;
 use actix_web::http::header::ContentType;
 use actix_web::http::StatusCode;
 use actix_web::web::Json;
-use actix_web::{error, post, HttpRequest, HttpResponse, Responder};
-use base64::engine::general_purpose;
 use base64::Engine;
+use base64::engine::general_purpose;
 use derive_more::{Display, Error};
 use log::{error, info};
 use qrcode_generator::QrCodeEcc;
 use serde::{Deserialize, Serialize};
 
 use crate::emvo_qrcode::*;
-use crate::prompt_pay::{MerchantPromptPayCreditTransfer, BAHT, CUSTOMER_PRESENTED, THAI};
+use crate::prompt_pay::{BAHT, CUSTOMER_PRESENTED, MerchantPromptPayCreditTransfer, THAI};
 
 //use qrcode::QrCode;
 //use image::{Luma, ImageBuffer};
@@ -84,9 +84,10 @@ pub async fn qr_code_tag30(
 
         let mut merchant_prompt_pay = MerchantPromptPayCreditTransfer::default();
         //let mobile_number = req.mobile_number.as_ref().unwrap(); //String::from("0809729900");
+
         merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
         merchant_prompt_pay.set_mobile_number(&req.0.mobile_number);
-
+        emvo.set_point_types(STATIC_POINT).expect("Point Type Error");
         emvo.set_transaction_currency(BAHT);
         emvo.set_transaction_amount(req.0.transaction_amount.to_string());
         emvo.set_merchant_name(req.0.merchant_name);

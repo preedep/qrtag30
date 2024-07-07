@@ -1,14 +1,14 @@
 #![allow(dead_code)]
 
 use actix_files::NamedFile;
-use actix_web::{web, App, Error, HttpServer};
+use actix_web::{App, Error, HttpServer, web};
 use actix_web_opentelemetry::RequestTracing;
 use log::Level;
 use opentelemetry::{global, KeyValue};
 use opentelemetry_appender_log::OpenTelemetryLogBridge;
 use opentelemetry_sdk::logs::{BatchLogProcessor, LoggerProvider};
-use opentelemetry_sdk::runtime::Tokio;
 use opentelemetry_sdk::Resource;
+use opentelemetry_sdk::runtime::Tokio;
 use opentelemetry_semantic_conventions as semcov;
 
 mod apis;

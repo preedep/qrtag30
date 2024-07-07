@@ -145,8 +145,8 @@ impl MerchantPromptPayCreditTransfer {
     }
 }
 mod test {
-    use base64::engine::general_purpose;
     use base64::Engine;
+    use base64::engine::general_purpose;
     use qrcode_generator::QrCodeEcc;
 
     use super::*;
@@ -161,6 +161,7 @@ mod test {
         merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
         merchant_prompt_pay.set_mobile_number(&"0809729900".to_string());
 
+        emvo.set_point_types(STATIC_POINT).expect("Error");
         emvo.set_transaction_currency(BAHT);
         emvo.set_transaction_amount("50".to_string());
         emvo.set_merchant_name("test".to_string());
@@ -181,9 +182,11 @@ mod test {
             .set_payload_format_indicator("02".to_string())
             .expect("Error");
         let mut merchant_prompt_pay = MerchantPromptPayCreditTransfer::default();
+
         merchant_prompt_pay.set_promptpay_presented_type(CUSTOMER_PRESENTED);
         merchant_prompt_pay.set_mobile_number(&"0809729900".to_string());
 
+        emvo.set_point_types(STATIC_POINT).expect("Error");
         emvo.set_transaction_currency(BAHT);
         emvo.set_transaction_amount("50".to_string());
         emvo.set_merchant_name("test".to_string());
