@@ -16,3 +16,6 @@ Cargo.lock
 /.idea/vcs.xml
 /run.sh
 
+/package-lock.json
+/node_modules/.package-lock.json
+/node_modules/k6/package.json

@@ -11,7 +11,7 @@ export let options = {
 };
 
 // Attempt to load the payload file
-const payloadFilePath = 'payload.json';
+const payloadFilePath = '/Users/preedee/Project/Rust/qrtag30/payload.json';
 let payload;
 
 try {

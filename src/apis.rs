@@ -80,6 +80,8 @@ pub async fn qr_code_tag30(
     let mut emvo = EMVQR::default();
     let result = emvo.set_payload_format_indicator("02".to_string());
 
+    info!("Request: {:?}", req.0);
+
     return if result.is_ok() {
         emvo.set_point_types(STATIC_POINT)
             .expect("TODO: panic message");
@@ -105,12 +107,13 @@ pub async fn qr_code_tag30(
 
         if let Ok(result) = result {
             let data = result;
+            info!("QRCode Data: {}", data);
 
-            let result: Vec<u8> =
-                qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).unwrap();
+            let result=
+                qrcode_generator::to_png_to_vec_from_str(data, QrCodeEcc::Low, 320).expect("Error convert qr code ");
+
             let str_b64 = general_purpose::STANDARD.encode(&result);
             info!("QRCode: {}", str_b64);
-
 
             Ok(QRCodeResponse::create_response(str_b64))
         } else {
